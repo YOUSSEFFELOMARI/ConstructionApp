@@ -18,7 +18,7 @@ import static com.EnsaA.ConstructionApp.controller.CustomResponse.response;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/admins")
+@RequestMapping("/auth/admins")
 @AllArgsConstructor
 public class AdminController {
     private final AdminService adminService;
