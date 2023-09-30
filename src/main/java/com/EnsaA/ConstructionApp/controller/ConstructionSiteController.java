@@ -1,5 +1,6 @@
 package com.EnsaA.ConstructionApp.controller;
 
+import com.EnsaA.ConstructionApp.dto.ConstructionSiteDto;
 import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.model.ConstructionSite;
 import com.EnsaA.ConstructionApp.model.Response;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 import static com.EnsaA.ConstructionApp.controller.CustomResponse.response;
@@ -24,13 +26,13 @@ public class ConstructionSiteController {
     private final ConstructionSiteService constructionSiteService;
 
     @GetMapping(value = "/page/{pageNum}")
-    public List<ConstructionSite> displayAllConstructionSites(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
-        Page<ConstructionSite> accountPage = constructionSiteService.showAllConstructionSites(pageNum, pageSize);
+    public List<ConstructionSiteDto> displayAllConstructionSites(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
+        Page<ConstructionSiteDto> accountPage = constructionSiteService.showAllConstructionSites(pageNum, pageSize);
         return accountPage.getContent();
     }
 
     @GetMapping("/page/CsiteByEmployeeid/{id}")
-    public ConstructionSite getCsite(@PathVariable(name = "id") int id){
+    public ConstructionSiteDto getCsite(@PathVariable(name = "id") int id){
         return constructionSiteService.getCSitesByEmployee(id);
     }
 
@@ -40,14 +42,14 @@ public class ConstructionSiteController {
     }
 
     @PostMapping
-    public ResponseEntity<ConstructionSite> saveConstructionSite(@Valid @RequestBody ConstructionSite admin) {
-        constructionSiteService.create(admin);
-        return ResponseEntity.status(HttpStatus.OK).body(admin);
+    public ResponseEntity<ConstructionSiteDto> saveConstructionSite(@Valid @RequestBody ConstructionSiteDto constructionSiteDto) throws ParseException {
+        constructionSiteService.create(constructionSiteDto);
+        return ResponseEntity.status(HttpStatus.OK).body(constructionSiteDto);
     }
 
     @PutMapping
-    public ResponseEntity<Response> updateConstructionSite(@Valid @RequestBody ConstructionSite admin) {
-        constructionSiteService.update(admin);
+    public ResponseEntity<Response> updateConstructionSite(@Valid @RequestBody ConstructionSiteDto constructionSiteDto) throws ParseException {
+        constructionSiteService.update(constructionSiteDto);
         return response("ConstructionSite successfully updated", HttpStatus.OK);
     }
 
