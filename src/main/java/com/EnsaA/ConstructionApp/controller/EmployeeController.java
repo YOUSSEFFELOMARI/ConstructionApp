@@ -24,13 +24,13 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping(value = "/page/{pageNum}")
-    public List<Employee> displayAllEmployees(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
-        Page<Employee> accountPage = employeeService.showAllEmplyers(pageNum, pageSize);
+    public List<EmployeeDto> displayAllEmployees(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
+        Page<EmployeeDto> accountPage = employeeService.showAllEmployees(pageNum, pageSize);
         return accountPage.getContent();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> displayEmployee(@PathVariable(name = "id") int id) {
+    public ResponseEntity<EmployeeDto> displayEmployee(@PathVariable(name = "id") int id) {
         return ResponseEntity.status(HttpStatus.OK).body(employeeService.find(id));
     }
 

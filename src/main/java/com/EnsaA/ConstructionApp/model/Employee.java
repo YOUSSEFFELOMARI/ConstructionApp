@@ -1,5 +1,6 @@
 package com.EnsaA.ConstructionApp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -11,11 +12,13 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.hibernate.annotations.CascadeType.ALL;
 import static org.hibernate.annotations.CascadeType.MERGE;
 @Slf4j
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,12 +38,12 @@ public class Employee extends BaseEntity{
     private String phone;
 
     @Cascade(MERGE)
-    @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Month> months=new HashSet<>();
 
     @Cascade(MERGE)
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = ConstructionSite.class)
-    @JoinColumn(name = "construction_site_id")
+    @OneToOne(fetch = FetchType.EAGER,targetEntity = ConstructionSite.class)
+    @JoinColumn(name = "construction_site_id" , referencedColumnName = "constructionSiteId")
     private ConstructionSite constructionSite;
 
 }

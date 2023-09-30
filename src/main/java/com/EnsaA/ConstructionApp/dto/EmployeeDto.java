@@ -5,6 +5,7 @@ import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
 import com.EnsaA.ConstructionApp.repository.ConstructionSiteRepository;
 import com.EnsaA.ConstructionApp.repository.MonthRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,12 +34,13 @@ public class EmployeeDto {
     private Set<MonthDto> months=new HashSet<>();
     private String constructionSite;
 
-    private MonthDto monthDto=new MonthDto();
+    @JsonIgnore
+    ConstructionSiteRepository constructionSiteRepository;
 
-    private ConstructionSiteRepository constructionSiteRepository;
 
     public EmployeeDto toDto(Employee employee){
-        Set<MonthDto> monthDtos=employee.getMonths().stream().map(month->monthDto.toDto(month)).collect(Collectors.toSet());
+        MonthDto monthDto=new MonthDto();
+        Set<MonthDto> monthDtos=employee.getMonths().stream().map(monthDto::toDto).collect(Collectors.toSet());
         return EmployeeDto.builder()
                 .employerId(employee.getEmployeeId())
                 .name(employee.getName())
@@ -46,12 +48,13 @@ public class EmployeeDto {
                 .homeAddress(employee.getHomeAddress())
                 .salary(String.valueOf(employee.getSalary()))
                 .phone(employee.getPhone())
-                .constructionSite(employee.getConstructionSite().getName())
+                .constructionSite(employee.getConstructionSite() == null ? "" : employee.getConstructionSite().getName() )
                 .months(monthDtos)
                 .build();
     }
 
     public Employee toEntity(EmployeeDto employeeDto) {
+        MonthDto monthDto=new MonthDto();
         Set<Month> monthSet=employeeDto.getMonths().stream()
                                         .map(monthDtoo -> {
                                             try {

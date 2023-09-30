@@ -1,5 +1,6 @@
 package com.EnsaA.ConstructionApp.repository;
 
+import com.EnsaA.ConstructionApp.model.ConstructionSite;
 import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,10 @@ public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 
     @Override
     Page<Employee> findAll(Pageable pageable);
+
+    Employee getEmployeeByNameAndLastName(String name, String lastname);
+
+
 
 
 }
