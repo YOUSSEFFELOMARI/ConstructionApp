@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -38,21 +39,30 @@ public class EmployeeService {
         return employeeRepository.findAll(pageable).map(employeeDto::toDto);
     }
 
-    public void create(Employee employee) {
+    public EmployeeDto create(EmployeeDto employeedto) throws ParseException {
+        Employee employee=employeeDto.toEntity(employeedto);
         if (employeeRepository.existsById(employee.getEmployeeId()))
             throw new EntityExistsException("Employer already stored in database - ID : "+employee.getEmployeeId()) {};
-        Month month= employee.getMonths().stream().toList().get(0);
-        System.out.println(month.getEmployee().getName());
-        employeeRepository.save(employee);
+        createEmployee(employee);
+        return employeedto;
+    }
+
+    public Employee createEmployee(Employee employee){
+        if (employeeRepository.existsById(employee.getEmployeeId()))
+            throw new EntityExistsException("Employer already stored in database - ID : "+employee.getEmployeeId()) {};
+        return employeeRepository.save(employee);
     }
 
     public void delete(int id) {
+        List<Month> months=monthService.getAllMonths(id);
+        months.forEach(mnth -> monthService.delete(mnth.getMonthId()));
         if (!employeeRepository.existsById(id))
             throw new EntityNotFoundException("Employer not found - ID : "+id) {};
         employeeRepository.deleteById(id);
     }
 
-    public void update(Employee employee) {
+    public void update(EmployeeDto employeedto) {
+        Employee employee=employeeDto.toEntity(employeedto);
         if (!employeeRepository.existsById(employee.getEmployeeId()))
             throw new EntityNotFoundException("Employer not found - ID : "+employee.getEmployeeId()) {};
         employeeRepository.save(employee);
@@ -63,21 +73,11 @@ public class EmployeeService {
     public EmployeeDto find(int id) {
         Employee employee= employeeRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Employer not found - ID : "+id) {});
-//        employee.setMonths(monthService.getAllMonths(id).stream().map(a-> {
-//            try {
-//                return monthDto.toEntity(a);
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).collect(Collectors.toSet()));
         EmployeeDto employeeDto1=employeeDto.toDto(employee);
-        employeeDto1.setMonths(new HashSet<>(monthService.getAllMonths(id)));
+        employeeDto1.setMonths(new HashSet<>(monthService.getAllMonthsDto(id)));
         return employeeDto1;
     }
 
-//    public Employee getEmployeeByNameAndLasNameFun(String name,String lastName){
-//        return employeeRepository.getEmployeeByNameAndLastName(name,lastName);
-//    }
     public long count() {
         return employeeRepository.count();
     }

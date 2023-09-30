@@ -38,6 +38,7 @@ public class EmployeeDto {
     private ConstructionSiteDto constructionSite;
 
     @JsonIgnore
+    @Autowired
     ConstructionSiteService constructionSiteService;
     @JsonIgnore
     @Autowired
@@ -46,6 +47,7 @@ public class EmployeeDto {
     public EmployeeDto toDto(Employee employee){
         MonthDto monthDto=new MonthDto();
         Set<MonthDto> monthDtos=employee.getMonths().stream().map(monthDto::toDto).collect(Collectors.toSet());
+
         return EmployeeDto.builder()
                 .employerId(employee.getEmployeeId())
                 .name(employee.getName())

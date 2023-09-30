@@ -34,6 +34,5 @@ public class Month extends BaseEntity{
     @Cascade(MERGE)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
-//    @JsonBackReference
     private Employee employee;
 }

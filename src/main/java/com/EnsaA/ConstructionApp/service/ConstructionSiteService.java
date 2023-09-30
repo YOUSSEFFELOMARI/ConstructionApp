@@ -10,6 +10,7 @@ import com.EnsaA.ConstructionApp.repository.EmployeeRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,8 @@ import java.util.stream.Collectors;
 public class ConstructionSiteService {
     private final ConstructionSiteRepository constructionSiteRepository;
     private final EmployeeRepository employeeRepository;
-    private final ConstructionSiteDto constructionSiteDto;
+    @Autowired
+    private ConstructionSiteDto constructionSiteDto;
     public Page<ConstructionSiteDto> showAllConstructionSites(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         return constructionSiteRepository.findAll(pageable).map(constructionSiteDto::toDto);
@@ -46,6 +48,7 @@ public class ConstructionSiteService {
     }
 
     public void delete(int id) {
+
         if (!constructionSiteRepository.existsById(id))
             throw new EntityNotFoundException("ConstructionSite not found - ID : "+id) {};
         constructionSiteRepository.deleteById(id);

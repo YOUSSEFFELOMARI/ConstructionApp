@@ -27,9 +27,14 @@ public class MonthService {
         return monthRepository.findAll(pageable).map(monthDto::toDto);
     }
 
-    public List<MonthDto> getAllMonths(int id) {
+    public List<MonthDto> getAllMonthsDto(int id) {
         List<Month> months=monthRepository.getMonthByEmployeeEmployeeId(id);
         return months.stream().map(monthDto::toDto).collect(Collectors.toList());
+    }
+
+    public List<Month> getAllMonths(int id){
+        List<Month> months=monthRepository.getMonthByEmployeeEmployeeId(id);
+        return months;
     }
 
     public MonthDto create(MonthDto monthdto) throws ParseException {

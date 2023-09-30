@@ -33,7 +33,7 @@ public class MonthController {
 
     @GetMapping("/page/monthsByEmployeeid/{id}")
     public List<MonthDto> getAll(@PathVariable(name = "id") int id){
-        return monthService.getAllMonths(id).stream().toList();
+        return monthService.getAllMonthsDto(id).stream().toList();
     }
 
     @GetMapping("/{id}")
