@@ -1,5 +1,6 @@
 package com.EnsaA.ConstructionApp.controller;
 
+import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.model.Month;
 import com.EnsaA.ConstructionApp.service.MonthService;
 import jakarta.validation.Valid;
@@ -8,27 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import com.EnsaA.ConstructionApp.model.Response;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.text.ParseException;
+import java.util.*;
 
 import static com.EnsaA.ConstructionApp.controller.CustomResponse.response;
 
@@ -36,29 +22,34 @@ import static com.EnsaA.ConstructionApp.controller.CustomResponse.response;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/Months")
-public class MonthEmployer {
+public class MonthController {
     private final MonthService monthService;
 
     @GetMapping(value = "/page/{pageNum}")
-    public List<Month> displayAllMonths(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
-        Page<Month> accountPage = monthService.showAllMonths(pageNum, pageSize);
+    public List<MonthDto> displayAllMonths(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
+        Page<MonthDto> accountPage = monthService.showAllMonths(pageNum, pageSize);
         return accountPage.getContent();
     }
 
+    @GetMapping("/page/monthsByEmployeeid/{id}")
+    public List<MonthDto> getAll(@PathVariable(name = "id") int id){
+        return monthService.getAllMonths(id).stream().toList();
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Month> displayMonth(@PathVariable(name = "id") int id) {
+    public ResponseEntity<MonthDto> displayMonth(@PathVariable(name = "id") int id) {
         return ResponseEntity.status(HttpStatus.OK).body(monthService.find(id));
     }
 
     @PostMapping
-    public ResponseEntity<Month> saveMonth(@Valid @RequestBody Month admin) {
-        monthService.create(admin);
-        return ResponseEntity.status(HttpStatus.OK).body(admin);
+    public ResponseEntity<MonthDto> saveMonth(@Valid @RequestBody MonthDto monthdto) throws ParseException {
+        monthService.create(monthdto);
+        return ResponseEntity.status(HttpStatus.OK).body(monthdto);
     }
 
     @PutMapping
-    public ResponseEntity<Response> updateMonth(@Valid @RequestBody Month admin) {
-        monthService.update(admin);
+    public ResponseEntity<Response> updateMonth(@Valid @RequestBody MonthDto monthdto) throws ParseException {
+        monthService.update(monthdto);
         return response("Month successfully updated", HttpStatus.OK);
     }
 

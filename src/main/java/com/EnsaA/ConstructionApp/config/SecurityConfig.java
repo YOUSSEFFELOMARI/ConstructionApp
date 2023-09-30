@@ -28,7 +28,8 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests->
-                        requests.requestMatchers("/api/v1/**").authenticated())
+                        requests.requestMatchers("/api/v1/**").authenticated()
+                                .requestMatchers("/auth/admins").permitAll())
                 .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
                 .defaultSuccessUrl("/").failureUrl("/n").permitAll())
                 .logout(logoutConfigurer -> logoutConfigurer.logoutSuccessUrl("/")
