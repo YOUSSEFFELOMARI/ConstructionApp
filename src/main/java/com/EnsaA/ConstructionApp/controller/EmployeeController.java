@@ -46,7 +46,7 @@ public class EmployeeController {
     }
 
     @PutMapping
-    public ResponseEntity<Response> updateEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<Response> updateEmployee(@Valid @RequestBody EmployeeDto employeeDto) throws ParseException {
         employeeService.update(employeeDto);
         return response("Employee successfully updated", HttpStatus.OK);
     }

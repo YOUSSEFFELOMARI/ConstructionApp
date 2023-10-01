@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Component
 public class EmployeeDto {
+
     private int  employerId;
     private String name;
     private String lastName;
@@ -35,54 +36,6 @@ public class EmployeeDto {
     private String salary;
     private String phone;
     private Set<MonthDto> months=new HashSet<>();
-    private ConstructionSiteDto constructionSite;
-
-    @JsonIgnore
-    @Autowired
-    ConstructionSiteService constructionSiteService;
-    @JsonIgnore
-    @Autowired
-    ConstructionSiteDto constructionSiteDto;
-
-    public EmployeeDto toDto(Employee employee){
-        MonthDto monthDto=new MonthDto();
-        Set<MonthDto> monthDtos=employee.getMonths().stream().map(monthDto::toDto).collect(Collectors.toSet());
-
-        return EmployeeDto.builder()
-                .employerId(employee.getEmployeeId())
-                .name(employee.getName())
-                .lastName(employee.getLastName())
-                .homeAddress(employee.getHomeAddress())
-                .salary(String.valueOf(employee.getSalary()))
-                .phone(employee.getPhone())
-                .constructionSite(employee.getConstructionSite() == null ? null : constructionSiteDto.toDto(employee.getConstructionSite()))
-                .months(monthDtos)
-                .build();
-    }
-
-    public Employee toEntity(EmployeeDto employeeDto) {
-        MonthDto monthDto=new MonthDto();
-        Set<Month> monthSet=employeeDto.getMonths().stream()
-                                        .map(monthDtoo -> {
-                                            try {
-                                                return monthDto.toEntity(monthDtoo);
-                                            } catch (ParseException e) {
-                                                throw new RuntimeException(e);
-                                            }
-                                        })
-                                        .collect(Collectors.toSet());
-        ConstructionSite Csite=constructionSiteService.find(employeeDto.getConstructionSite().getConstructionSiteId());
-
-        return Employee.builder()
-                .employeeId(employeeDto.getEmployerId())
-                .name(employeeDto.getName())
-                .lastName(employeeDto.getLastName())
-                .homeAddress(employeeDto.getHomeAddress())
-                .salary(Double.parseDouble(employeeDto.getSalary()))
-                .phone(employeeDto.getPhone())
-                .constructionSite(Csite)
-                .months(monthSet)
-                .build();
-    }
+    private ConstructionSiteDto constructionSiteDto;
 
 }

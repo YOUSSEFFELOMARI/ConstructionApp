@@ -1,8 +1,12 @@
 package com.EnsaA.ConstructionApp.service;
 
 
+import com.EnsaA.ConstructionApp.dto.ConstructionSiteDto;
 import com.EnsaA.ConstructionApp.dto.EmployeeDto;
 import com.EnsaA.ConstructionApp.dto.MonthDto;
+import com.EnsaA.ConstructionApp.mapper.ConstructionSiteMapper;
+import com.EnsaA.ConstructionApp.mapper.EmployeeMapper;
+import com.EnsaA.ConstructionApp.mapper.MonthMapper;
 import com.EnsaA.ConstructionApp.model.ConstructionSite;
 import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
@@ -16,11 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,26 +32,40 @@ public class EmployeeService {
     private final ConstructionSiteService constructionSiteService;
     private final EmployeeRepository employeeRepository;
 
-    private final EmployeeDto employeeDto;
-    private final MonthDto monthDto;
+    private final EmployeeMapper employeeMapper;
+    private final MonthMapper monthMapper;
+    private final ConstructionSiteMapper constructionSiteMapper;
 
     public Page<EmployeeDto> showAllEmployees(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        return employeeRepository.findAll(pageable).map(employeeDto::toDto);
+        Page<EmployeeDto> employeeDtoPage= employeeRepository.findAll(pageable).map(employeeMapper::toDto);
+        employeeDtoPage.forEach(
+                elem -> {elem.setMonths(monthService.getAllMonthsDtoforPage(elem.getEmployerId()));
+                    if (elem.getConstructionSiteDto() != null) {
+                        ConstructionSite constructionSite= constructionSiteService.find(elem.getConstructionSiteDto().getConstructionSiteId());
+                        elem.setConstructionSiteDto(constructionSiteMapper.toDto(constructionSite));
+                    }
+                });
+        return employeeDtoPage;
     }
 
     public EmployeeDto create(EmployeeDto employeedto) throws ParseException {
-        Employee employee=employeeDto.toEntity(employeedto);
-        if (employeeRepository.existsById(employee.getEmployeeId()))
+        Employee employee=employeeMapper.toEntity(employeedto);
+        if (employeeRepository.getEmployeeByNameAndLastName(employee.getName(),employee.getLastName()) != null)
             throw new EntityExistsException("Employer already stored in database - ID : "+employee.getEmployeeId()) {};
+        if (employeedto.getConstructionSiteDto() != null) {
+            ConstructionSite constructionSite = constructionSiteService.create(employeedto.getConstructionSiteDto());
+            employee.setConstructionSite(constructionSite);
+        }
         createEmployee(employee);
         return employeedto;
     }
 
-    public Employee createEmployee(Employee employee){
+    public void createEmployee(Employee employee) throws ParseException {
         if (employeeRepository.existsById(employee.getEmployeeId()))
             throw new EntityExistsException("Employer already stored in database - ID : "+employee.getEmployeeId()) {};
-        return employeeRepository.save(employee);
+//        constructionSiteService.create(employee.getConstructionSite());
+        employeeRepository.save(employee);
     }
 
     public void delete(int id) {
@@ -61,10 +76,16 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public void update(EmployeeDto employeedto) {
-        Employee employee=employeeDto.toEntity(employeedto);
+    public void update(EmployeeDto employeedto) throws ParseException {
+        Employee employee=employeeMapper.toEntity(employeedto);
         if (!employeeRepository.existsById(employee.getEmployeeId()))
             throw new EntityNotFoundException("Employer not found - ID : "+employee.getEmployeeId()) {};
+        employeedto.setMonths(new HashSet<>(monthService.getAllMonthsDto(employeedto.getEmployerId())));
+        ConstructionSite constructionSite=constructionSiteMapper.toEntity(employeedto.getConstructionSiteDto());
+        if (employeedto.getConstructionSiteDto().getConstructionSiteId() == 0) {
+                constructionSite = constructionSiteService.create(employeedto.getConstructionSiteDto());
+        }
+        employee.setConstructionSite(constructionSite);
         employeeRepository.save(employee);
     }
 
@@ -73,10 +94,22 @@ public class EmployeeService {
     public EmployeeDto find(int id) {
         Employee employee= employeeRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Employer not found - ID : "+id) {});
-        EmployeeDto employeeDto1=employeeDto.toDto(employee);
+        EmployeeDto employeeDto1=employeeMapper.toDto(employee);
         employeeDto1.setMonths(new HashSet<>(monthService.getAllMonthsDto(id)));
+        if (employee.getConstructionSite() != null) {
+            ConstructionSite constructionSite= constructionSiteService.find(employee.getConstructionSite().getConstructionSiteId());
+            employeeDto1.setConstructionSiteDto(constructionSiteMapper.toDto(constructionSite));
+        }
         return employeeDto1;
     }
+
+    public Employee findEmployer(int id){
+        Employee employee= employeeRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Employer not found - ID : "+id) {});
+        return employee;
+    }
+
+
 
     public long count() {
         return employeeRepository.count();

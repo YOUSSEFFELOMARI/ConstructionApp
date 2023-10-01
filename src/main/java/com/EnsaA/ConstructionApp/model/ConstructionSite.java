@@ -32,7 +32,4 @@ public class ConstructionSite extends BaseEntity{
     private Date startDate;
     private Date endDate;
 
-//    @OneToOne(mappedBy = "employee")
-//    Employee employee;
-
 }

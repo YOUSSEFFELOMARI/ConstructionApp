@@ -1,6 +1,7 @@
 package com.EnsaA.ConstructionApp.service;
 
 import com.EnsaA.ConstructionApp.dto.MonthDto;
+import com.EnsaA.ConstructionApp.mapper.MonthMapper;
 import com.EnsaA.ConstructionApp.model.Month;
 import com.EnsaA.ConstructionApp.repository.MonthRepository;
 import jakarta.persistence.EntityExistsException;
@@ -20,16 +21,16 @@ import java.util.stream.Collectors;
 @Service
 public class MonthService {
     private final MonthRepository monthRepository;
-    private final MonthDto monthDto;
+    private final MonthMapper monthMapper;
 
     public Page<MonthDto> showAllMonths(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        return monthRepository.findAll(pageable).map(monthDto::toDto);
+        return monthRepository.findAll(pageable).map(monthMapper::toDto);
     }
 
     public List<MonthDto> getAllMonthsDto(int id) {
         List<Month> months=monthRepository.getMonthByEmployeeEmployeeId(id);
-        return months.stream().map(monthDto::toDto).collect(Collectors.toList());
+        return months.stream().map(monthMapper::toDto).collect(Collectors.toList());
     }
 
     public List<Month> getAllMonths(int id){
@@ -38,7 +39,7 @@ public class MonthService {
     }
 
     public MonthDto create(MonthDto monthdto) throws ParseException {
-        Month month=monthDto.toEntity(monthdto);
+        Month month=monthMapper.toEntity(monthdto);
         if (monthRepository.existsById(month.getMonthId()))
             throw new EntityExistsException("Month already stored in database - ID : "+month.getMonthId()) {};
         createMonth(month);
@@ -58,7 +59,7 @@ public class MonthService {
     }
 
     public void update(MonthDto monthdto) throws ParseException{
-    Month month=monthDto.toEntity(monthdto);
+    Month month=monthMapper.toEntity(monthdto);
         if (!monthRepository.existsById(month.getMonthId()))
             throw new EntityNotFoundException("Month not found - ID : "+month.getMonthId()) {};
         monthRepository.save(month);
@@ -67,10 +68,15 @@ public class MonthService {
     public MonthDto find(int id) {
         Month month=monthRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Month not found - ID : "+id) {});
-        return monthDto.toDto(month);
+        return monthMapper.toDto(month);
     }
 
     public long count() {
         return monthRepository.count();
+    }
+
+    public Set<MonthDto> getAllMonthsDtoforPage(int employerId) {
+        List<Month> months=monthRepository.getMonthByEmployeeEmployeeId(employerId);
+        return months.stream().map(monthMapper::toDto).collect(Collectors.toSet());
     }
 }

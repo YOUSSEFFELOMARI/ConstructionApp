@@ -31,7 +31,6 @@ public class Month extends BaseEntity{
 
     private boolean isPayed;
 
-    @Cascade(MERGE)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Employee employee;

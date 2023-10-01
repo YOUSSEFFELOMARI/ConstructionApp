@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 
-    @Override
-    Page<Employee> findAll(Pageable pageable);
 
     Employee getEmployeeByNameAndLastName(String name, String lastname);
 

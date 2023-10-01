@@ -2,6 +2,7 @@ package com.EnsaA.ConstructionApp.service;
 
 import com.EnsaA.ConstructionApp.dto.ConstructionSiteDto;
 import com.EnsaA.ConstructionApp.dto.MonthDto;
+import com.EnsaA.ConstructionApp.mapper.ConstructionSiteMapper;
 import com.EnsaA.ConstructionApp.model.ConstructionSite;
 import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
@@ -27,24 +28,32 @@ public class ConstructionSiteService {
     private final ConstructionSiteRepository constructionSiteRepository;
     private final EmployeeRepository employeeRepository;
     @Autowired
-    private ConstructionSiteDto constructionSiteDto;
+    private ConstructionSiteMapper constructionSiteMapper;
     public Page<ConstructionSiteDto> showAllConstructionSites(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        return constructionSiteRepository.findAll(pageable).map(constructionSiteDto::toDto);
+        return constructionSiteRepository.findAll(pageable).map(constructionSiteMapper::toDto);
     }
 
     public ConstructionSiteDto getCSitesByEmployee(int id) {
         Employee employee= employeeRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Employer not found - ID : "+id) {});
-        return constructionSiteDto.toDto(employee.getConstructionSite());
+        return constructionSiteMapper.toDto(employee.getConstructionSite());
     }
 
 
-    public void create(ConstructionSiteDto constructionSitedto) throws ParseException {
-        ConstructionSite constructionSite= constructionSiteDto.toEntity(constructionSitedto);
+    public ConstructionSite create(ConstructionSiteDto constructionSitedto) throws ParseException {
+        ConstructionSite constructionSite= constructionSiteMapper.toEntity(constructionSitedto);
         if (constructionSiteRepository.existsById(constructionSite.getConstructionSiteId()))
             throw new EntityExistsException("ConstructionSite already stored in database - ID : "+constructionSite.getConstructionSiteId()) {};
         constructionSiteRepository.save(constructionSite);
+        return constructionSite;
+    }
+
+    public ConstructionSite create(ConstructionSite constructionSite) throws ParseException {
+        if (constructionSiteRepository.existsById(constructionSite.getConstructionSiteId()))
+            throw new EntityExistsException("ConstructionSite already stored in database - ID : "+constructionSite.getConstructionSiteId()) {};
+        constructionSiteRepository.save(constructionSite);
+        return constructionSite;
     }
 
     public void delete(int id) {
@@ -55,7 +64,7 @@ public class ConstructionSiteService {
     }
 
     public void update(ConstructionSiteDto constructionSitedto) throws ParseException {
-        ConstructionSite constructionSite= constructionSiteDto.toEntity(constructionSitedto);
+        ConstructionSite constructionSite= constructionSiteMapper.toEntity(constructionSitedto);
         if (!constructionSiteRepository.existsById(constructionSite.getConstructionSiteId()))
             throw new EntityNotFoundException("ConstructionSite not found - ID : "+constructionSite.getConstructionSiteId()) {};
         constructionSiteRepository.save(constructionSite);

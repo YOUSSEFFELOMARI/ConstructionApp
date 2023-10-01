@@ -3,6 +3,7 @@ package com.EnsaA.ConstructionApp.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,8 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.hibernate.annotations.CascadeType.ALL;
-import static org.hibernate.annotations.CascadeType.MERGE;
+import static org.hibernate.annotations.CascadeType.*;
+
 @Slf4j
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -22,6 +23,7 @@ import static org.hibernate.annotations.CascadeType.MERGE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Transactional
 public class Employee extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -38,7 +40,7 @@ public class Employee extends BaseEntity{
     private String phone;
 
     @Cascade(MERGE)
-    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER)
     private Set<Month> months=new HashSet<>();
 
     @Cascade(MERGE)
