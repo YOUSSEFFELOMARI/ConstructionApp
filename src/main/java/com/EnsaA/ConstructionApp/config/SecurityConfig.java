@@ -1,6 +1,7 @@
 package com.EnsaA.ConstructionApp.config;
 
 //import com.EnsaA.ConstructionApp.Security.ConstuctionAppUsernamePwdAuthenticationProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +30,7 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests->
-                        requests.requestMatchers("/api/v1/**").authenticated()
+                        requests.requestMatchers("/api/v1/**").permitAll()
                                 .requestMatchers("/auth/admins").permitAll())
                 .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
                 .defaultSuccessUrl("/").failureUrl("/n").permitAll())
@@ -49,6 +51,26 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CommonsRequestLoggingFilter logFilter() {
+        CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter() {
+            @Override
+            protected void beforeRequest(HttpServletRequest request, String message) {
+            }
+
+            @Override
+            protected void afterRequest(HttpServletRequest request, String message) {
+                message = message.substring(14);
+                super.afterRequest(request, message);
+            }
+        };
+        filter.setIncludeQueryString(true);
+        filter.setIncludePayload(true);
+        filter.setIncludeHeaders(false);
+        filter.setMaxPayloadLength(10000);
+        return filter;
     }
 
 }

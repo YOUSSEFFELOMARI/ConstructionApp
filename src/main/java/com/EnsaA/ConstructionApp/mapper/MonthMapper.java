@@ -1,5 +1,6 @@
 package com.EnsaA.ConstructionApp.mapper;
 
+import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
 import com.EnsaA.ConstructionApp.repository.EmployeeRepository;
@@ -33,10 +34,10 @@ public class MonthMapper {
         return employeeRepository.getEmployeeByNameAndLastName(monthDto.getEmployeeName(),monthDto.getEmployeeLastName());
     }
 
-    public Month toEntity(com.EnsaA.ConstructionApp.dto.MonthDto monthDto) throws ParseException {
+    public Month toEntity(MonthDto monthDto) throws ParseException {
         return Month.builder()
                 .monthId(monthDto.getMonthId())
-                .date(mapFormattedDateToDate(monthDto.getDate()))
+                .date(monthDto.getDate()!=null ? mapFormattedDateToDate(monthDto.getDate()) : null)
                 .isPayed(monthDto.isPayed())
                 .employee(getEmployee(monthDto))
                 .build();

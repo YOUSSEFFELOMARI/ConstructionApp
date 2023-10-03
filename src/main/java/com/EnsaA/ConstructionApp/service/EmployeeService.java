@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -39,34 +41,46 @@ public class EmployeeService {
     public Page<EmployeeDto> showAllEmployees(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Page<EmployeeDto> employeeDtoPage= employeeRepository.findAll(pageable).map(employeeMapper::toDto);
-        employeeDtoPage.forEach(
-                elem -> {elem.setMonths(monthService.getAllMonthsDtoforPage(elem.getEmployerId()));
-                    if (elem.getConstructionSiteDto() != null) {
-                        ConstructionSite constructionSite= constructionSiteService.find(elem.getConstructionSiteDto().getConstructionSiteId());
-                        elem.setConstructionSiteDto(constructionSiteMapper.toDto(constructionSite));
-                    }
-                });
+//        employeeDtoPage.forEach(
+//                elem -> {elem.setMonths(monthService.getAllMonthsDtoforPage(elem.getEmployerId()));
+//                    if (elem.getConstructionSiteDto() != null) {
+//                        ConstructionSite constructionSite= constructionSiteService.find(elem.getConstructionSiteDto().getConstructionSiteId());
+//                        elem.setConstructionSiteDto(constructionSiteMapper.toDto(constructionSite));
+//                    }
+//                });
         return employeeDtoPage;
     }
 
     public EmployeeDto create(EmployeeDto employeedto) throws ParseException {
         Employee employee=employeeMapper.toEntity(employeedto);
         if (employeeRepository.getEmployeeByNameAndLastName(employee.getName(),employee.getLastName()) != null)
-            throw new EntityExistsException("Employer already stored in database - ID : "+employee.getEmployeeId()) {};
-        if (employeedto.getConstructionSiteDto() != null) {
-            ConstructionSite constructionSite = constructionSiteService.create(employeedto.getConstructionSiteDto());
-            employee.setConstructionSite(constructionSite);
-        }
-        createEmployee(employee);
+            throw new EntityExistsException("Employer already stored in database : "+employee.getName()+" "+employee.getLastName()) {};
+//        if (employeedto.getMonths() != null) {
+//            employeedto.getMonths().forEach(
+//                    mdto -> {
+//                        try {
+//                            Month month = monthService.create(mdto);
+//                            employee.setMonths(Set.of(month));
+//                        } catch (ParseException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//            );
+//        }
+//        if (employeedto.getConstructionSiteDto() != null) {
+//            ConstructionSite constructionSite = constructionSiteService.create(employeedto.getConstructionSiteDto());
+//            employee.setConstructionSite(constructionSite);
+//        }
+//        createEmployee(employee);
+        employeeRepository.save(employee);
+
         return employeedto;
     }
 
-    public void createEmployee(Employee employee) throws ParseException {
-        if (employeeRepository.existsById(employee.getEmployeeId()))
-            throw new EntityExistsException("Employer already stored in database - ID : "+employee.getEmployeeId()) {};
-//        constructionSiteService.create(employee.getConstructionSite());
-        employeeRepository.save(employee);
-    }
+//    public void createEmployee(Employee employee) throws ParseException {
+////        if (employeeRepository.existsById(employee.getEmployeeId()))
+////            throw new EntityExistsException("Employer already stored in database - ID : "+employee.getEmployeeId()) {};
+//    }
 
     public void delete(int id) {
         List<Month> months=monthService.getAllMonths(id);
@@ -77,15 +91,32 @@ public class EmployeeService {
     }
 
     public void update(EmployeeDto employeedto) throws ParseException {
+        Set<Month> months= new HashSet<>(monthService.getAllMonths(employeedto.getEmployerId()));
         Employee employee=employeeMapper.toEntity(employeedto);
+
         if (!employeeRepository.existsById(employee.getEmployeeId()))
             throw new EntityNotFoundException("Employer not found - ID : "+employee.getEmployeeId()) {};
-        employeedto.setMonths(new HashSet<>(monthService.getAllMonthsDto(employeedto.getEmployerId())));
-        ConstructionSite constructionSite=constructionSiteMapper.toEntity(employeedto.getConstructionSiteDto());
-        if (employeedto.getConstructionSiteDto().getConstructionSiteId() == 0) {
-                constructionSite = constructionSiteService.create(employeedto.getConstructionSiteDto());
+            employee.setMonths(months);
+
+        if (employeedto.getMonths() != null) {
+            employeedto.getMonths().forEach(
+                    mdto -> {
+                        try {
+                            months.add(monthMapper.toEntity(mdto));
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+            );
         }
-        employee.setConstructionSite(constructionSite);
+        employee.setMonths(months);
+
+//        employeedto.setMonths(new HashSet<>(monthService.getAllMonthsDto(employeedto.getEmployerId())));
+//        ConstructionSite constructionSite=constructionSiteMapper.toEntity(employeedto.getConstructionSiteDto());
+//        if (employeedto.getConstructionSiteDto().getConstructionSiteId() == 0) {
+//                constructionSite = constructionSiteService.create(employeedto.getConstructionSiteDto());
+//        }
+//        employee.setConstructionSite(constructionSite);
         employeeRepository.save(employee);
     }
 

@@ -40,7 +40,6 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeDto> saveEmployee(@Valid @RequestBody EmployeeDto employeeDto) throws ParseException {
-//        constructionSiteService.create(employeeDto.getConstructionSiteDto());
         employeeService.create(employeeDto);
         return ResponseEntity.status(HttpStatus.OK).body(employeeDto);
     }

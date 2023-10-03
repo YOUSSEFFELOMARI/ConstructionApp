@@ -1,4 +1,4 @@
-package ma.uiz.observatoire.audit;
+package com.EnsaA.ConstructionApp.audit;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;

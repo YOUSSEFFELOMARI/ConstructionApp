@@ -11,7 +11,7 @@ import java.util.Date;
 
 import static org.hibernate.annotations.CascadeType.MERGE;
 
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @Entity

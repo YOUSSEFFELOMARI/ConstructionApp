@@ -13,7 +13,7 @@ import java.util.Date;
 import static org.hibernate.annotations.CascadeType.ALL;
 import static org.hibernate.annotations.CascadeType.MERGE;
 
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @Entity
@@ -25,6 +25,7 @@ public class Month extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
     @JsonProperty("key")
+    @Column(name = "month_id")
     private int monthId;
 
     private Date date;

@@ -1,5 +1,6 @@
 package com.EnsaA.ConstructionApp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import java.util.Set;
 import static org.hibernate.annotations.CascadeType.*;
 
 @Slf4j
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "{Month}")
 @Entity
 @Getter
 @Setter
@@ -29,6 +30,7 @@ public class Employee extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
     @JsonProperty("key")
+    @Column(name = "employee_id")
     private int  employeeId;
 
     private String name;
@@ -39,11 +41,11 @@ public class Employee extends BaseEntity{
     @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
     private String phone;
 
-    @Cascade(MERGE)
-    @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER)
+    @Cascade(ALL)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Month> months=new HashSet<>();
 
-    @Cascade(MERGE)
+    @Cascade({MERGE,PERSIST})
     @OneToOne(fetch = FetchType.EAGER,targetEntity = ConstructionSite.class)
     @JoinColumn(name = "construction_site_id" , referencedColumnName = "constructionSiteId")
     private ConstructionSite constructionSite;
