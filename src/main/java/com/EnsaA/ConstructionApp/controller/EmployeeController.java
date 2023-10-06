@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.EnsaA.ConstructionApp.controller.CustomResponse.response;
@@ -31,6 +32,10 @@ public class EmployeeController {
     public List<EmployeeDto> displayAllEmployees(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
         Page<EmployeeDto> accountPage = employeeService.showAllEmployees(pageNum, pageSize);
         return accountPage.getContent();
+    }
+    @GetMapping("/messages")
+    public ResponseEntity<List<String>> messages() {
+        return ResponseEntity.ok(Arrays.asList("first", "second"));
     }
 
     @GetMapping("/{id}")
