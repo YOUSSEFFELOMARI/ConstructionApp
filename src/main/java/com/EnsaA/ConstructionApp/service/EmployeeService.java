@@ -52,6 +52,10 @@ public class EmployeeService {
         return employeeDtoPage;
     }
 
+    public List<EmployeeDto> getAllEmployees() {
+        return employeeRepository.findAll().stream().map(employeeMapper::toDto).collect(Collectors.toList());
+    }
+
     public EmployeeDto create(EmployeeDto employeedto) throws ParseException {
         System.out.println("hello in service to add employeee");
         Employee employee=employeeMapper.toEntity(employeedto);

@@ -33,6 +33,12 @@ public class EmployeeController {
         Page<EmployeeDto> accountPage = employeeService.showAllEmployees(pageNum, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(accountPage.getContent());
     }
+
+    @GetMapping(value = "/page")
+    public List<EmployeeDto> getAllEmployees() {
+        return employeeService.getAllEmployees();
+    }
+
     @GetMapping("/messages")
     public ResponseEntity<List<String>> messages() {
         return ResponseEntity.ok(Arrays.asList("first", "second"));
