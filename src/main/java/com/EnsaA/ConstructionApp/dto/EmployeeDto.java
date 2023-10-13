@@ -38,4 +38,35 @@ public class EmployeeDto {
     private Set<MonthDto> months=new HashSet<>();
     private ConstructionSiteDto constructionSiteDto;
 
+    public int getEmployerId() {
+        return employerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public Set<MonthDto> getMonths() {
+        return months;
+    }
+
+    public ConstructionSiteDto getConstructionSiteDto() {
+        return constructionSiteDto;
+    }
 }

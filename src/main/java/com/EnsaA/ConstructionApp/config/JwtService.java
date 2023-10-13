@@ -1,5 +1,6 @@
 package com.EnsaA.ConstructionApp.config;
 
+import com.EnsaA.ConstructionApp.model.Admin.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -20,20 +23,23 @@ public class JwtService {
     //to generate a token
     public String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            AppUser userDetails
             //long expiration
     ) {
+        LocalDateTime expirationTime = LocalDateTime.now().plusDays(30);
+        Date expirationDate = Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant());
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDetails.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()  + 30*24*60*60*1000 ))
+                .setExpiration(expirationDate)
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
     //check is the token valid (check the user name and the ixpiration date)
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        System.out.println("check the validityyyyyy");
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }

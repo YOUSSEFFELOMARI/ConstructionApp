@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,9 @@ public class EmployeeService {
     }
 
     public EmployeeDto create(EmployeeDto employeedto) throws ParseException {
+        System.out.println("hello in service to add employeee");
         Employee employee=employeeMapper.toEntity(employeedto);
+        System.out.println("the employee recevied is: "+employee);
         if (employeeRepository.getEmployeeByNameAndLastName(employee.getName(),employee.getLastName()) != null)
             throw new EntityExistsException("Employer already stored in database : "+employee.getName()+" "+employee.getLastName()) {};
 //        if (employeedto.getMonths() != null) {
@@ -72,6 +75,7 @@ public class EmployeeService {
 //            employee.setConstructionSite(constructionSite);
 //        }
 //        createEmployee(employee);
+        System.out.println("---------tryin to save employeeeee------");
         employeeRepository.save(employee);
 
         return employeedto;
@@ -145,4 +149,25 @@ public class EmployeeService {
     public long count() {
         return employeeRepository.count();
     }
+
+    public  List<EmployeeDto> findEmployees(int pageNum, int pageSize, String constructionName , String date){
+        System.out.println("find employeees name is "+constructionName+" date is :"+date);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Page<EmployeeDto> employeeDtoPage= employeeRepository.findAll(pageable).map(employeeMapper::toDto);
+        List<EmployeeDto> employees =employeeDtoPage.getContent();
+        List<EmployeeDto> filteredEmployees = employees.stream()
+                .filter(employee -> employee.getConstructionSiteDto().getName().equals(constructionName))
+                .filter(employee -> employee.getMonths().stream().anyMatch(month -> month.getDate().equals(date)))
+                .peek(employee-> {
+                    Set<MonthDto> filteredMonths=employee.getMonths().stream().filter(month->month.getDate().equals(date))
+                            .collect(Collectors.toSet());
+
+                    employee.setMonths(filteredMonths);
+                })
+                .collect(Collectors.toList());
+
+        return filteredEmployees;
+
+    }
+
 }

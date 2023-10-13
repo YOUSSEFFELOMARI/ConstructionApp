@@ -22,6 +22,11 @@ public class AppUser implements UserDetails {
     @GeneratedValue
     public int id;
     public String name;
+
+    public String getEmail() {
+        return email;
+    }
+
     public String email;
     public String password;
 
@@ -32,7 +37,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.name;
+        return this.email;
     }
 
     @Override

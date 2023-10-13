@@ -26,8 +26,8 @@ public class ConstructionSiteMapper {
                 .constructionSiteId(constructionSiteDto.getConstructionSiteId())
                 .name(constructionSiteDto.getName())
                 .Address(constructionSiteDto.getAddress())
-                    .startDate(constructionSiteDto.getStartDate() != null ? mapFormattedDateToDate(constructionSiteDto.getStartDate()): null)
-                .endDate(constructionSiteDto.getStartDate() != null ? mapFormattedDateToDate(constructionSiteDto.getEndDate()): null)
+                    .startDate(constructionSiteDto.getStartDate() != null ? (mapFormattedDateToDate(constructionSiteDto.getStartDate())) : null)
+                .endDate(constructionSiteDto.getStartDate() != null ? (mapFormattedDateToDate(constructionSiteDto.getEndDate())) : null)
                 .build();
     }
 

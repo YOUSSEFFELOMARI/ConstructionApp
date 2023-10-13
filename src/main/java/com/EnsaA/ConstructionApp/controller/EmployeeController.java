@@ -29,9 +29,9 @@ public class EmployeeController {
     private final ConstructionSiteService constructionSiteService;
 
     @GetMapping(value = "/page/{pageNum}")
-    public List<EmployeeDto> displayAllEmployees(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
+    public ResponseEntity<List<EmployeeDto>> displayAllEmployees(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
         Page<EmployeeDto> accountPage = employeeService.showAllEmployees(pageNum, pageSize);
-        return accountPage.getContent();
+        return ResponseEntity.status(HttpStatus.OK).body(accountPage.getContent());
     }
     @GetMapping("/messages")
     public ResponseEntity<List<String>> messages() {
@@ -45,6 +45,7 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeDto> saveEmployee(@Valid @RequestBody EmployeeDto employeeDto) throws ParseException {
+        System.out.println("hello in to create the employee");
         employeeService.create(employeeDto);
         return ResponseEntity.status(HttpStatus.OK).body(employeeDto);
     }
@@ -64,5 +65,9 @@ public class EmployeeController {
     @GetMapping("/count")
     public ResponseEntity<Long> countEmployers(){
         return ResponseEntity.status(HttpStatus.OK).body(employeeService.count());
+    }
+    @GetMapping("/searchEmplyees")
+    public  ResponseEntity<List<EmployeeDto>> FindEmployees(@RequestParam("name") String name,@RequestParam("date") String date){
+      return  ResponseEntity.status(HttpStatus.OK).body(employeeService.findEmployees(1,20,name,date));
     }
 }

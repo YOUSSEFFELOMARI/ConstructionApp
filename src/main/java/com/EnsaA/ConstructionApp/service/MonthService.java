@@ -71,6 +71,7 @@ public class MonthService {
     Month month=monthMapper.toEntity(monthdto);
         if (!monthRepository.existsById(month.getMonthId()))
             throw new EntityNotFoundException("Month not found - ID : "+month.getMonthId()) {};
+        System.out.println("month is "+monthdto);
         monthRepository.save(month);
     }
 

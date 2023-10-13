@@ -25,4 +25,23 @@ public class ConstructionSiteDto {
     private String startDate;
     private String endDate;
 
+    public int getConstructionSiteId() {
+        return constructionSiteId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
 }

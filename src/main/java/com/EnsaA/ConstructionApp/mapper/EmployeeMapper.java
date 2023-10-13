@@ -43,6 +43,7 @@ public class EmployeeMapper {
     }
 
     public Employee toEntity(EmployeeDto employeeDto) throws ParseException {
+        System.out.println("employee dto is "+employeeDto);
         MonthDto monthDto=new MonthDto();
         Set<Month> monthSet=employeeDto.getMonths().stream()
                 .map(monthDtoo -> {
@@ -55,7 +56,11 @@ public class EmployeeMapper {
                 .collect(Collectors.toSet());
         ConstructionSite Csite;
         if(employeeDto.getConstructionSiteDto() == null) Csite=null;
-        else Csite= constructionSiteMapper.toEntity(employeeDto.getConstructionSiteDto());
+        else{
+            System.out.println("reaching the construction dto ");
+            Csite= constructionSiteMapper.toEntity(employeeDto.getConstructionSiteDto());
+
+        }
 
         return Employee.builder()
                 .employeeId(employeeDto.getEmployerId())

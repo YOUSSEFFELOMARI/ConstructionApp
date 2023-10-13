@@ -28,8 +28,24 @@ public class MonthDto {
     private int monthId;
     private String date;
     private boolean isPayed;
+
     private String EmployeeName;
+
     private String EmployeeLastName;
+
+
+
+    public int getMonthId() {
+        return monthId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public boolean isPayed() {
+        return isPayed;
+    }
 
 
 }
