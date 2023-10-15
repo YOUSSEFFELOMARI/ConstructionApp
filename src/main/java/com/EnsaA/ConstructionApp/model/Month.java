@@ -24,7 +24,6 @@ public class Month extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
-    @JsonProperty("key")
     @Column(name = "month_id")
     private int monthId;
 

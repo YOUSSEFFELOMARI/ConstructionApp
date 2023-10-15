@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader=request.getHeader("Authorization");
-        System.out.println("tokeeeen is :"+authHeader);
+//        System.out.println("tokeeeen is :"+authHeader);
         String userEmail;
         String jwt;
         if(authHeader==null || !authHeader.startsWith("Bearer ")){
@@ -35,13 +35,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         jwt=authHeader.substring(7);
         userEmail=jwtService.extractUsername(jwt);
-        System.out.println("useremail is "+userEmail);
+//        System.out.println("useremail is "+userEmail);
         if(userEmail!=null && SecurityContextHolder.getContext().getAuthentication() == null){
-            System.out.println("hello in securitty context");
+//            System.out.println("hello in securitty context");
             UserDetails userDetails=userDetailsService.loadUserByUsername(userEmail);
             System.out.println("user by user email is"+userDetails.getUsername());
             if(jwtService.isTokenValid(jwt,userDetails)){
-                System.out.println("token is valid or not ");
+//                System.out.println("token is valid or not ");
                 UsernamePasswordAuthenticationToken authToken=new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -51,9 +51,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         //This creates a new instance of WebAuthenticationDetails which holds information about the web request, such as the IP address, session ID
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
-                System.out.println("updating context");
+//                System.out.println("updating context");
                 SecurityContextHolder.getContext().setAuthentication( authToken );
-                System.out.println("let go to the next filer");
+//                System.out.println("let go to the next filer");
                 filterChain.doFilter(request,response);
             }
 

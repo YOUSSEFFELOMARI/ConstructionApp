@@ -37,7 +37,7 @@ public class MonthService {
         return months.stream().map(monthMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Month> getAllMonths(int id){
+    public List<Month> getAllMonthsByEmployeeId(int id){
         List<Month> months=monthRepository.getMonthByEmployeeEmployeeId(id);
         return months;
     }

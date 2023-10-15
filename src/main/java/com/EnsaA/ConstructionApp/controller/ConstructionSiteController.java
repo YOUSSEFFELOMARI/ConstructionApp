@@ -1,6 +1,7 @@
 package com.EnsaA.ConstructionApp.controller;
 
 import com.EnsaA.ConstructionApp.dto.ConstructionSiteDto;
+import com.EnsaA.ConstructionApp.dto.EmployeeDto;
 import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.model.ConstructionSite;
 import com.EnsaA.ConstructionApp.model.Response;
@@ -29,6 +30,11 @@ public class ConstructionSiteController {
     public List<ConstructionSiteDto> displayAllConstructionSites(@PathVariable(name = "pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
         Page<ConstructionSiteDto> accountPage = constructionSiteService.showAllConstructionSites(pageNum, pageSize);
         return accountPage.getContent();
+    }
+
+    @GetMapping(value = "/page")
+    public List<ConstructionSiteDto> getAllEmployees() {
+        return constructionSiteService.getAllConstruction();
     }
 
     @GetMapping("/page/CsiteByEmployeeid/{id}")

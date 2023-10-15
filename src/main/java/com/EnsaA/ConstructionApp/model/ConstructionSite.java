@@ -22,7 +22,6 @@ public class ConstructionSite extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
-    @JsonProperty("key")
     private int constructionSiteId;
 
     private String name;

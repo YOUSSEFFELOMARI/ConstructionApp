@@ -29,7 +29,6 @@ public class Employee extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
-    @JsonProperty("key")
     @Column(name = "employee_id")
     private int  employeeId;
 

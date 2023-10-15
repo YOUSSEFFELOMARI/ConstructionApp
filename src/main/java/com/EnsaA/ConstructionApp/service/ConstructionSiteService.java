@@ -1,6 +1,7 @@
 package com.EnsaA.ConstructionApp.service;
 
 import com.EnsaA.ConstructionApp.dto.ConstructionSiteDto;
+import com.EnsaA.ConstructionApp.dto.EmployeeDto;
 import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.mapper.ConstructionSiteMapper;
 import com.EnsaA.ConstructionApp.model.ConstructionSite;
@@ -40,6 +41,9 @@ public class ConstructionSiteService {
         return constructionSiteMapper.toDto(employee.getConstructionSite());
     }
 
+    public List<ConstructionSiteDto> getAllConstruction() {
+        return constructionSiteRepository.findAll().stream().map(e->constructionSiteMapper.toDto(e)).collect(Collectors.toList());
+    }
 
     public ConstructionSite create(ConstructionSiteDto constructionSitedto) throws ParseException {
         ConstructionSite constructionSite= constructionSiteMapper.toEntity(constructionSitedto);
