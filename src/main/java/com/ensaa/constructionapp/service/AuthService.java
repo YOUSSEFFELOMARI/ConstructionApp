@@ -83,7 +83,7 @@ public class AuthService {
                                                                         .build();
             return new ResponseEntity<>(authResponse,HttpStatus.OK);
 
-            }catch (Exception e){System.err.println("an exception catched "+e.getMessage());
+            }catch (Exception e){
             e.getStackTrace();
             }
          //if somthing went wrong
