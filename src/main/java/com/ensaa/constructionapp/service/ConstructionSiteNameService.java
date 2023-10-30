@@ -49,10 +49,10 @@ public class ConstructionSiteNameService {
         constructionSiteNameRepository.deleteById(id);
     }
 
-    public void update(ConstructionSiteName ConstructionSiteName){
-        if (!constructionSiteNameRepository.existsById(ConstructionSiteName.getConstructionSiteNameId()))
-            throw new EntityNotFoundException(CSNAMENOTFOUND+ConstructionSiteName.getConstructionSiteNameId()) {};
-        constructionSiteNameRepository.save(ConstructionSiteName);
+    public void update(ConstructionSiteName constructionSiteName){
+        if (!constructionSiteNameRepository.existsById(constructionSiteName.getConstructionSiteNameId()))
+            throw new EntityNotFoundException(CSNAMENOTFOUND+constructionSiteName.getConstructionSiteNameId()) {};
+        constructionSiteNameRepository.save(constructionSiteName);
     }
 
     public ConstructionSiteName find(int id) {
