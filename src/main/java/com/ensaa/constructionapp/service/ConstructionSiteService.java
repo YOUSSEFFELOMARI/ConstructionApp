@@ -39,7 +39,7 @@ public class ConstructionSiteService {
     }
 
     public List<ConstructionSiteDto> getAllConstruction() {
-        return constructionSiteRepository.findAll().stream().map(e->constructionSiteMapper.toDto(e)).collect(Collectors.toList());
+        return constructionSiteRepository.findAll().stream().map(e->constructionSiteMapper.toDto(e)).toList();
     }
 
     public ConstructionSite create(ConstructionSiteDto constructionSitedto) throws ParseException {
