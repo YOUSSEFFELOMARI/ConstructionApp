@@ -17,6 +17,8 @@ import java.util.List;
 public class ConstructionSiteNameService {
     private final ConstructionSiteNameRepository constructionSiteNameRepository;
 
+    private final String CSNAMENOTFOUND="ConstructionSiteName not found - ID : ";
+
     public Page<ConstructionSiteName> showAllConstructionSiteNames(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         return constructionSiteNameRepository.findAll(pageable);
@@ -24,7 +26,7 @@ public class ConstructionSiteNameService {
 
     public ConstructionSiteName getConstructionSiteName(int id) {
         return constructionSiteNameRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("ConstructionSiteName not found - ID : "+id) {});
+                new EntityNotFoundException(CSNAMENOTFOUND+id) {});
     }
 
     public List<ConstructionSiteName> getAllConstruction() {
@@ -33,7 +35,7 @@ public class ConstructionSiteNameService {
 
     public ConstructionSiteName create(ConstructionSiteName ConstructionSiteName) {
         if (constructionSiteNameRepository.existsById(ConstructionSiteName.getConstructionSiteNameId()))
-            throw new EntityExistsException("ConstructionSite already stored in database - ID : "+ConstructionSiteName.getConstructionSiteNameId()) {};
+            throw new EntityExistsException("ConstructionSiteName already stored in database - ID : "+ConstructionSiteName.getConstructionSiteNameId()) {};
         constructionSiteNameRepository.save(ConstructionSiteName);
         return ConstructionSiteName;
     }
@@ -43,19 +45,19 @@ public class ConstructionSiteNameService {
     public void delete(int id) {
 
         if (!constructionSiteNameRepository.existsById(id))
-            throw new EntityNotFoundException("ConstructionSite not found - ID : "+id) {};
+            throw new EntityNotFoundException(CSNAMENOTFOUND+id) {};
         constructionSiteNameRepository.deleteById(id);
     }
 
     public void update(ConstructionSiteName ConstructionSiteName){
         if (!constructionSiteNameRepository.existsById(ConstructionSiteName.getConstructionSiteNameId()))
-            throw new EntityNotFoundException("ConstructionSite not found - ID : "+ConstructionSiteName.getConstructionSiteNameId()) {};
+            throw new EntityNotFoundException(CSNAMENOTFOUND+ConstructionSiteName.getConstructionSiteNameId()) {};
         constructionSiteNameRepository.save(ConstructionSiteName);
     }
 
     public ConstructionSiteName find(int id) {
         return constructionSiteNameRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("ConstructionSite not found - ID : "+id) {});
+                new EntityNotFoundException(CSNAMENOTFOUND+id) {});
     }
 
     public long count() {

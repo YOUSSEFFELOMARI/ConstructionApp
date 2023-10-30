@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class ConstructionSiteService {
     private final ConstructionSiteRepository constructionSiteRepository;
     private final EmployeeRepository employeeRepository;
+    private final String CSNOTFOUND="ConstructionSite not found - ID : ";
     @Autowired
     private ConstructionSiteMapper constructionSiteMapper;
     public Page<ConstructionSiteDto> showAllConstructionSites(int pageNum, int pageSize) {
@@ -33,7 +34,7 @@ public class ConstructionSiteService {
 
     public ConstructionSiteDto getCSitesByEmployee(int id) {
         Employee employee= employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Employer not found - ID : "+id) {});
+                new EntityNotFoundException(CSNOTFOUND+id) {});
         return constructionSiteMapper.toDto(employee.getConstructionSite());
     }
 
@@ -59,20 +60,20 @@ public class ConstructionSiteService {
     public void delete(int id) {
 
         if (!constructionSiteRepository.existsById(id))
-            throw new EntityNotFoundException("ConstructionSite not found - ID : "+id) {};
+            throw new EntityNotFoundException(CSNOTFOUND+id) {};
         constructionSiteRepository.deleteById(id);
     }
 
     public void update(ConstructionSiteDto constructionSitedto) throws ParseException {
         ConstructionSite constructionSite= constructionSiteMapper.toEntity(constructionSitedto);
         if (!constructionSiteRepository.existsById(constructionSite.getConstructionSiteId()))
-            throw new EntityNotFoundException("ConstructionSite not found - ID : "+constructionSite.getConstructionSiteId()) {};
+            throw new EntityNotFoundException(CSNOTFOUND+constructionSite.getConstructionSiteId()) {};
         constructionSiteRepository.save(constructionSite);
     }
 
     public ConstructionSite find(int id) {
         return constructionSiteRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("ConstructionSite not found - ID : "+id) {});
+                new EntityNotFoundException(CSNOTFOUND+id) {});
     }
 
     public long count() {

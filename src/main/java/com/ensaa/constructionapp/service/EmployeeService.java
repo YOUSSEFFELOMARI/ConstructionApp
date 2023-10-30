@@ -35,6 +35,7 @@ public class EmployeeService {
     private final MonthMapper monthMapper;
     private final ConstructionSiteMapper constructionSiteMapper;
 
+    private final String EMPNOTFOUND="Employee not found - ID : ";
     public Page<EmployeeDto> showAllEmployees(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         return employeeRepository.findAll(pageable).map(employeeMapper::toDto);
@@ -48,7 +49,7 @@ public class EmployeeService {
     public EmployeeDto create(EmployeeDto employeedto) throws ParseException {
         Employee employee=employeeMapper.toEntity(employeedto);
         if (employeeRepository.getEmployeeByNameAndLastName(employee.getName(),employee.getLastName()) != null)
-            throw new EntityExistsException("Employer already stored in database : "+employee.getName()+" "+employee.getLastName()) {};
+            throw new EntityExistsException(EMPNOTFOUND+employee.getName()+" "+employee.getLastName()) {};
         employeeRepository.save(employee);
         return employeedto;
     }
@@ -57,7 +58,7 @@ public class EmployeeService {
         List<Month> months=monthService.getAllMonthsByEmployeeId(id);
         months.forEach(mnth -> monthService.delete(mnth.getMonthId()));
         if (!employeeRepository.existsById(id))
-            throw new EntityNotFoundException("Employer not found - ID : "+id) {};
+            throw new EntityNotFoundException(EMPNOTFOUND+id) {};
         employeeRepository.deleteById(id);
     }
 
@@ -66,7 +67,7 @@ public class EmployeeService {
         Employee employee=employeeMapper.toEntity(employeedto);
 
         if (!employeeRepository.existsById(employee.getEmployeeId()))
-            throw new EntityNotFoundException("Employer not found - ID : "+employee.getEmployeeId()) {};
+            throw new EntityNotFoundException(EMPNOTFOUND+employee.getEmployeeId()) {};
 
         employee.setMonths(months);
 
@@ -90,7 +91,7 @@ public class EmployeeService {
 
     public EmployeeDto find(int id) {
         Employee employee= employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Employer not found - ID : "+id) {});
+                new EntityNotFoundException(EMPNOTFOUND+id) {});
         EmployeeDto employeeDto1=employeeMapper.toDto(employee);
         employeeDto1.setMonths(new HashSet<>(monthService.getAllMonthsDto(id)));
         return employeeDto1;    
@@ -98,7 +99,7 @@ public class EmployeeService {
 
     public Employee findEmployer(int id){
         Employee employee= employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Employer not found - ID : "+id) {});
+                new EntityNotFoundException(EMPNOTFOUND+id) {});
         return employee;
     }
 

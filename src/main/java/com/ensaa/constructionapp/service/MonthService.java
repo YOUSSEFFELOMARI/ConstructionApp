@@ -26,6 +26,8 @@ public class MonthService {
     private final MonthMapper monthMapper;
     private final EmployeeRepository employeeRepository;
 
+    private final String MNTNOTFOUND="Month not found - ID : ";
+
     public Page<MonthDto> showAllMonths(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         return monthRepository.findAll(pageable).map(monthMapper::toDto);
@@ -46,7 +48,7 @@ public class MonthService {
         if (monthRepository.existsById(month.getMonthId()))
             throw new EntityExistsException("Month already stored in database - ID : "+month.getMonthId()) {};
         if (employeeRepository.getEmployeeByNameAndLastName(monthdto.getEmployeeName(),monthdto.getEmployeeLastName()) == null){
-            throw new EntityNotFoundException("Employee not found in database - Name : "+monthdto.getEmployeeName() +" - LastName : "+
+            throw new EntityNotFoundException(MNTNOTFOUND+monthdto.getEmployeeName() +" - LastName : "+
                     monthdto.getEmployeeLastName()) {};
         }
         createMonth(month);
@@ -55,27 +57,27 @@ public class MonthService {
 
     public void createMonth(Month month) throws ParseException {
         if (monthRepository.existsById(month.getMonthId()))
-            throw new EntityExistsException("Month already stored in database - ID : "+month.getMonthId()) {};
+            throw new EntityExistsException(MNTNOTFOUND+month.getMonthId()) {};
         monthRepository.save(month);
     }
 
     public void delete(int id) {
         if (!monthRepository.existsById(id))
-            throw new EntityNotFoundException("Month not found - ID : "+id) {};
+            throw new EntityNotFoundException(MNTNOTFOUND+id) {};
         monthRepository.deleteById(id);
     }
 
     public void update(MonthDto monthdto) throws ParseException{
     Month month=monthMapper.toEntity(monthdto);
         if (!monthRepository.existsById(month.getMonthId()))
-            throw new EntityNotFoundException("Month not found - ID : "+month.getMonthId()) {};
+            throw new EntityNotFoundException(MNTNOTFOUND+month.getMonthId()) {};
         System.out.println("month is "+monthdto);
         monthRepository.save(month);
     }
 
     public MonthDto find(int id) {
         Month month=monthRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Month not found - ID : "+id) {});
+                new EntityNotFoundException(MNTNOTFOUND+id) {});
         return monthMapper.toDto(month);
     }
 
