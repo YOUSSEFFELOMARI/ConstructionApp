@@ -1,15 +1,10 @@
 package com.EnsaA.ConstructionApp.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
-
-import static org.hibernate.annotations.CascadeType.MERGE;
 
 //@EqualsAndHashCode(callSuper = true)
 @Getter

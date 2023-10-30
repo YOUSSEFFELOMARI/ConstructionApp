@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
+@Slf4j
 @Service
 public class JwtService {
     private final String SECRET_KEY="gh5i39q/EShZ0HgyrC7y7KGdWI7MfAKu/Q+RqsVcge5dOQ==";
@@ -37,9 +39,8 @@ public class JwtService {
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-    //check is the token valid (check the user name and the ixpiration date)
+    //check is the token valid (check the user name and the expiration date)
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        System.out.println("check the validityyyyyy");
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }

@@ -1,8 +1,5 @@
 package com.EnsaA.ConstructionApp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Pattern;
@@ -40,7 +37,7 @@ public class Employee extends BaseEntity{
     @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
     private String phone;
 
-    @Cascade(ALL)
+    @Cascade({MERGE,PERSIST})
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Month> months=new HashSet<>();
 

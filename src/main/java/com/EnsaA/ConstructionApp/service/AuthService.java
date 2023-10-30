@@ -30,7 +30,6 @@ public class AuthService {
         public ResponseEntity<AuthenticationResponse> login(LoginInfo loginInfo){
             String email=loginInfo.getEmail();
             String password=loginInfo.getPassword();
-            System.out.println("email is :"+email +" password is: " +password);
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             email,
@@ -78,19 +77,16 @@ public class AuthService {
 
               //generate a tokn
             String token=jwtService.buildToken(new HashMap<>(),user);
-            System.out.println("the token is built: "+token);
               //build the response
             AuthenticationResponse authResponse=AuthenticationResponse.builder()
                                                                         .token(token)
                                                                         .build();
-            System.out.println("the response is buit");
             return new ResponseEntity<>(authResponse,HttpStatus.OK);
 
-            }catch (Exception e){System.out.println("an exception catched "+e.getMessage());
+            }catch (Exception e){System.err.println("an exception catched "+e.getMessage());
             e.getStackTrace();
             }
          //if somthing went wrong
-
         AuthenticationResponse authenticationResponse=AuthenticationResponse.builder()
                 .msg("Something Went Wrong")
                 .build();

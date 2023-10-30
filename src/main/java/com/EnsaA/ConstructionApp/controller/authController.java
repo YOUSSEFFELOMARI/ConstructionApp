@@ -27,7 +27,6 @@ public class authController {
 
     @PostMapping("/registre")
     ResponseEntity<AuthenticationResponse> registre(@RequestBody RegisterUser registerUser){
-        System.out.println("hello in the auth controller"+registerUser.getEmail()+" "+ registerUser.getPassword());
                 return authService.registre(registerUser);
         }
 }

@@ -1,13 +1,11 @@
 package com.EnsaA.ConstructionApp.service;
 
 
-import com.EnsaA.ConstructionApp.dto.ConstructionSiteDto;
 import com.EnsaA.ConstructionApp.dto.EmployeeDto;
 import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.mapper.ConstructionSiteMapper;
 import com.EnsaA.ConstructionApp.mapper.EmployeeMapper;
 import com.EnsaA.ConstructionApp.mapper.MonthMapper;
-import com.EnsaA.ConstructionApp.model.ConstructionSite;
 import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
 import com.EnsaA.ConstructionApp.repository.EmployeeRepository;
@@ -20,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +42,7 @@ public class EmployeeService {
     }
 
     public List<EmployeeDto> getAllEmployees() {
-        return employeeRepository.findAll().stream().map(employeeMapper::toDto).collect(Collectors.toList());
+        return employeeRepository.findAll().stream().map(employeeMapper::toDto).toList();
     }
 
 
@@ -87,14 +84,6 @@ public class EmployeeService {
         }
         employee.setMonths(months);
 
-//        employeedto.setMonths(new HashSet<>(monthService.getAllMonthsDto(employeedto.getEmployerId())));
-//        ConstructionSite constructionSite=constructionSiteMapper.toEntity(employeedto.getConstructionSiteDto());
-//        constructionSiteService.update();
-//        System.out.println(constructionSite.getConstructionSiteId());
-        //        if (employeedto.getConstructionSiteDto().getConstructionSiteId() == 0) {
-//                constructionSite = constructionSiteService.create(employeedto.getConstructionSiteDto());
-//        }
-//        employee.setConstructionSite(constructionSite);
         employeeRepository.save(employee);
     }
 
@@ -105,11 +94,7 @@ public class EmployeeService {
                 new EntityNotFoundException("Employer not found - ID : "+id) {});
         EmployeeDto employeeDto1=employeeMapper.toDto(employee);
         employeeDto1.setMonths(new HashSet<>(monthService.getAllMonthsDto(id)));
-        if (employee.getConstructionSite() != null) {
-            ConstructionSite constructionSite= constructionSiteService.find(employee.getConstructionSite().getConstructionSiteId());
-            employeeDto1.setConstructionSiteDto(constructionSiteMapper.toDto(constructionSite));
-        }
-        return employeeDto1;
+        return employeeDto1;    
     }
 
     public Employee findEmployer(int id){

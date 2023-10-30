@@ -5,15 +5,10 @@ import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.model.ConstructionSite;
 import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
-import com.EnsaA.ConstructionApp.repository.EmployeeRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,7 +22,6 @@ public class EmployeeMapper {
 
 
     public EmployeeDto toDto(Employee employee){
-        MonthDto monthDto=new MonthDto();
         Set<MonthDto> monthDtos=employee.getMonths().stream().map(monthMapper::toDto).collect(Collectors.toSet());
 
         return EmployeeDto.builder()
@@ -43,21 +37,19 @@ public class EmployeeMapper {
     }
 
     public Employee toEntity(EmployeeDto employeeDto) throws ParseException {
-        System.out.println("employee dto is "+employeeDto);
         MonthDto monthDto=new MonthDto();
         Set<Month> monthSet=employeeDto.getMonths().stream()
                 .map(monthDtoo -> {
                     try {
                         return monthMapper.toEntity(monthDtoo);
                     } catch (ParseException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException(e.getMessage());
                     }
                 })
                 .collect(Collectors.toSet());
         ConstructionSite Csite;
         if(employeeDto.getConstructionSiteDto() == null) Csite=null;
         else{
-            System.out.println("reaching the construction dto ");
             Csite= constructionSiteMapper.toEntity(employeeDto.getConstructionSiteDto());
 
         }

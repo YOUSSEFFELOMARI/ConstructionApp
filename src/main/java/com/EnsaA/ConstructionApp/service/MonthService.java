@@ -2,7 +2,6 @@ package com.EnsaA.ConstructionApp.service;
 
 import com.EnsaA.ConstructionApp.dto.MonthDto;
 import com.EnsaA.ConstructionApp.mapper.MonthMapper;
-import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Month;
 import com.EnsaA.ConstructionApp.repository.EmployeeRepository;
 import com.EnsaA.ConstructionApp.repository.MonthRepository;
@@ -34,7 +33,7 @@ public class MonthService {
 
     public List<MonthDto> getAllMonthsDto(int id) {
         List<Month> months=monthRepository.getMonthByEmployeeEmployeeId(id);
-        return months.stream().map(monthMapper::toDto).collect(Collectors.toList());
+        return months.stream().map(monthMapper::toDto).toList();
     }
 
     public List<Month> getAllMonthsByEmployeeId(int id){
@@ -57,7 +56,6 @@ public class MonthService {
     public void createMonth(Month month) throws ParseException {
         if (monthRepository.existsById(month.getMonthId()))
             throw new EntityExistsException("Month already stored in database - ID : "+month.getMonthId()) {};
-//        month.getEmployee().
         monthRepository.save(month);
     }
 
@@ -85,7 +83,7 @@ public class MonthService {
         return monthRepository.count();
     }
 
-    public Set<MonthDto> getAllMonthsDtoforPage(int employerId) {
+    public Set<MonthDto> getAllMonthsDtoForPage(int employerId) {
         List<Month> months=monthRepository.getMonthByEmployeeEmployeeId(employerId);
         return months.stream().map(monthMapper::toDto).collect(Collectors.toSet());
     }

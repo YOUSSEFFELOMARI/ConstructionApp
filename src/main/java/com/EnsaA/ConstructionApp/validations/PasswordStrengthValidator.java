@@ -14,12 +14,11 @@ public class PasswordStrengthValidator implements
 
     @Override
     public void initialize(PasswordValidator passwordValidator) {
-        weakPasswords = Arrays.asList("12345", "password", "qwerty");
+        weakPasswords = Arrays.asList("12345", "password", "qwerty","azerty","123456789");
     }
 
     @Override
-    public boolean isValid(String passwordField,
-                           ConstraintValidatorContext cxt) {
+    public boolean isValid(String passwordField, ConstraintValidatorContext cxt) {
         return passwordField != null && (!weakPasswords.contains(passwordField));
     }
 }

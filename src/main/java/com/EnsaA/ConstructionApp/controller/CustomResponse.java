@@ -1,9 +1,11 @@
 package com.EnsaA.ConstructionApp.controller;
 
 import com.EnsaA.ConstructionApp.model.Response;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@NoArgsConstructor
 public class CustomResponse {
 
     public static ResponseEntity<Response> response(String message, HttpStatus status){

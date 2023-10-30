@@ -1,14 +1,12 @@
 package com.EnsaA.ConstructionApp.controller;
 
 import com.EnsaA.ConstructionApp.dto.EmployeeDto;
-import com.EnsaA.ConstructionApp.model.Employee;
 import com.EnsaA.ConstructionApp.model.Response;
 import com.EnsaA.ConstructionApp.service.ConstructionSiteService;
 import com.EnsaA.ConstructionApp.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +49,6 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeDto> saveEmployee(@Valid @RequestBody EmployeeDto employeeDto) throws ParseException {
-        System.out.println("hello in to create the employee");
         employeeService.create(employeeDto);
         return ResponseEntity.status(HttpStatus.OK).body(employeeDto);
     }

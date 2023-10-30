@@ -42,7 +42,7 @@ public class GlobalExceptionRestController extends ResponseEntityExceptionHandle
         body.put("timestamp", formatter.format(new Date()));
         body.put("status", status.value());
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().
-                map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+                map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
         body.put("errors", errors);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }

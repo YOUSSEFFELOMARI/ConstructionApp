@@ -1,8 +1,6 @@
 package com.EnsaA.ConstructionApp.service;
 
 import com.EnsaA.ConstructionApp.model.ConstructionSiteName;
-import com.EnsaA.ConstructionApp.model.ConstructionSite;
-import com.EnsaA.ConstructionApp.model.ConstructionSiteName;
 import com.EnsaA.ConstructionApp.repository.ConstructionSiteNameRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,9 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
