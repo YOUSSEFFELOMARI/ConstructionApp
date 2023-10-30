@@ -10,7 +10,7 @@ import static com.ensaa.constructionapp.model.Admin.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {
-    admin(
+    ADMIN(
             Set.of(
                     ADMIN_READ,
                     ADMIN_CREATE,
@@ -18,7 +18,7 @@ public enum Role {
                     ADMIN_UPDATE
             )
     ),
-   manager(
+   MANAGER(
         Set.of(
                 MANAGER_READ,
                 MANAGER_CREATE,
@@ -26,7 +26,7 @@ public enum Role {
                 MANAGER_DELETE
         )
    ),
-    user(Collections.emptySet());
+    USER(Collections.emptySet());
 
     @Getter
     private final Set<Permission> permissions;
