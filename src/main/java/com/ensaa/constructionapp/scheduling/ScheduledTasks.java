@@ -37,7 +37,8 @@ public class ScheduledTasks {
         employeeDtoList.forEach(employeeDto ->{
             Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
             try {
-                monthService.create(new MonthDto(0, mapDateToFormattedDate(date),false,employeeDto.getName(),employeeDto.getLastName()));
+                monthService.create(new MonthDto(0, mapDateToFormattedDate(date),
+                                            false,employeeDto.getName(),employeeDto.getLastName()));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
