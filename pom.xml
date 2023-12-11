@@ -19,7 +19,7 @@
 		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.language>java</sonar.language>
 		<sonar.host.url>http://localhost:9000/</sonar.host.url>
-		<sonar.login>sqp_e038b6a73ca15f71214fe5634621552864a2cd75</sonar.login>
+		<sonar.login>sqp_f27a77faafbc74bee02f3912b44b247b2488809b</sonar.login>
 		<sonar.projectKey>ConstructionApp</sonar.projectKey>
 	</properties>
 	<dependencies>

@@ -21,7 +21,7 @@ import static com.ensaa.constructionapp.controller.CustomResponse.response;
 @Slf4j
 @RestController
 @AllArgsConstructor
-    @RequestMapping("/api/v1/Employees")
+@RequestMapping("/api/v1/Employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final ConstructionSiteService constructionSiteService;
@@ -71,6 +71,6 @@ public class EmployeeController {
     }
     @GetMapping("/searchEmplyees")
     public  ResponseEntity<List<EmployeeDto>> FindEmployees(@RequestParam("name") String name,@RequestParam("date") String date){
-      return  ResponseEntity.status(HttpStatus.OK).body(employeeService.findEmployees(1,20,name,date));
+        return  ResponseEntity.status(HttpStatus.OK).body(employeeService.findEmployees(1,20,name,date));
     }
 }
