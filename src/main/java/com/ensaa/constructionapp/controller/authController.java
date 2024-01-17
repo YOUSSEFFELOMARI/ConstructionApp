@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class authController {
     @Autowired
     private AuthService authService;
+
     @PostMapping("/login")
     ResponseEntity<AuthenticationResponse> login(@RequestBody LoginInfo loginInfo){
             return  authService.login(loginInfo);
@@ -27,6 +28,6 @@ public class authController {
 
     @PostMapping("/registre")
     ResponseEntity<AuthenticationResponse> registre(@RequestBody RegisterUser registerUser){
-                return authService.registre(registerUser);
-        }
+        return authService.registre(registerUser);
+    }
 }
