@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Permission.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ConstructionApp</a> &gt; <a href="index.source.html" class="el_package">com.ensaa.constructionapp.model.Admin</a> &gt; <span class="el_source">Permission.java</span></div><h1>Permission.java</h1><pre class="source lang-java linenums">package com.ensaa.constructionapp.model.Admin;
+
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+<span class="nc" id="L7">@RequiredArgsConstructor</span>
+public enum Permission {
+<span class="nc" id="L9">    ADMIN_READ(&quot;admin:read&quot;),</span>
+<span class="nc" id="L10">    ADMIN_UPDATE(&quot;admin:update&quot;),</span>
+<span class="nc" id="L11">    ADMIN_CREATE(&quot;admin:create&quot;),</span>
+<span class="nc" id="L12">    ADMIN_DELETE(&quot;admin:delete&quot;),</span>
+<span class="nc" id="L13">    MANAGER_READ(&quot;management:read&quot;),</span>
+<span class="nc" id="L14">    MANAGER_UPDATE(&quot;management:update&quot;),</span>
+<span class="nc" id="L15">    MANAGER_CREATE(&quot;management:create&quot;),</span>
+<span class="nc" id="L16">    MANAGER_DELETE(&quot;management:delete&quot;);</span>
+
+<span class="nc" id="L18">    @Getter</span>
+    private final String permissionn;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
