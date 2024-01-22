@@ -60,10 +60,10 @@ import java.util.function.Function;
     }
 
     //get a specific claim
-   public &lt;T&gt; T extractClaim(String token, Function&lt;Claims, T&gt; claimsResolver) {
-<span class="nc" id="L64">       final Claims claims = extractAllClaims(token);</span>
-<span class="nc" id="L65">       return claimsResolver.apply(claims);</span>
-   }
+    public &lt;T&gt; T extractClaim(String token, Function&lt;Claims, T&gt; claimsResolver) {
+<span class="nc" id="L64">        final Claims claims = extractAllClaims(token);</span>
+<span class="nc" id="L65">        return claimsResolver.apply(claims);</span>
+    }
 
     private Claims extractAllClaims(String token) {
 <span class="nc" id="L69">        return Jwts</span>
