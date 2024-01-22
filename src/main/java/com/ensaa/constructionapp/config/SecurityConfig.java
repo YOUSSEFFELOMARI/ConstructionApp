@@ -46,7 +46,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Specify the allowed origins, methods, and headers
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedOrigins(List.of("http://localhost:4200","https://constructionapp-5wbh.onrender.com/**"));
         config.setAllowedMethods(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
