@@ -48,7 +48,7 @@ public class MonthService {
         if (monthRepository.existsById(month.getMonthId()))
             throw new EntityExistsException("Month already stored in database - ID : "+month.getMonthId()) {};
         if (employeeRepository.getEmployeeByNameAndLastName(monthdto.getEmployeeName(),monthdto.getEmployeeLastName()) == null){
-            throw new EntityNotFoundException(MNTNOTFOUND+monthdto.getEmployeeName() +" - LastName : "+
+            throw new EntityNotFoundException("Employee Not Found"+monthdto.getEmployeeName() +" - LastName : "+
                     monthdto.getEmployeeLastName()) {};
         }
         createMonth(month);
@@ -71,7 +71,6 @@ public class MonthService {
     Month month=monthMapper.toEntity(monthdto);
         if (!monthRepository.existsById(month.getMonthId()))
             throw new EntityNotFoundException(MNTNOTFOUND+month.getMonthId()) {};
-        System.out.println("month is "+monthdto);
         monthRepository.save(month);
     }
 
