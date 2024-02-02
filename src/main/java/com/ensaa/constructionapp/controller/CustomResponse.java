@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 
 @NoArgsConstructor
 public class CustomResponse {
-
-
     public static ResponseEntity<Response> response(String message, HttpStatus status){
         Response response = new Response();
         response.setStatusCode(String.valueOf(status.value()));
@@ -18,5 +16,4 @@ public class CustomResponse {
                 .status(status)
                 .body(response);
     }
-
 }

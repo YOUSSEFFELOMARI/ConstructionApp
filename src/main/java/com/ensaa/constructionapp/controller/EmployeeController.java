@@ -37,10 +37,6 @@ public class EmployeeController {
         return employeeService.getAllEmployees();
     }
 
-    @GetMapping("/messages")
-    public ResponseEntity<List<String>> messages() {
-        return ResponseEntity.ok(Arrays.asList("first", "second"));
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDto> displayEmployee(@PathVariable(name = "id") int id) {

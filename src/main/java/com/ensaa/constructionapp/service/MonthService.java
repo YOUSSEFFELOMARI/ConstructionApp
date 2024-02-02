@@ -27,6 +27,7 @@ public class MonthService {
     private final EmployeeRepository employeeRepository;
 
     private final String MNTNOTFOUND="Month not found - ID : ";
+    private final String MNTEXIST="Month already exist - ID : ";
 
     public Page<MonthDto> showAllMonths(int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
@@ -57,7 +58,7 @@ public class MonthService {
 
     public void createMonth(Month month) throws ParseException {
         if (monthRepository.existsById(month.getMonthId()))
-            throw new EntityExistsException(MNTNOTFOUND+month.getMonthId()) {};
+            throw new EntityExistsException(MNTEXIST+month.getMonthId()) {};
         monthRepository.save(month);
     }
 
